@@ -2,6 +2,13 @@
 
 A containerised environment that runs R simulations orchestrated by a Python wrapper. Python prepares input data and invokes R scripts as subprocesses; R reads from a shared inputs path and writes results to a shared outputs path.
 
+## Project Structure
+
+- **`app/`** — the Python Wrapper. Sets things up and drives execution: the simulation registry (`registry.py`), simulation configs (`config.py`), subprocess invocation (`runner.py`), and the CLI entry point (`__main__.py`, run via `python -m app`).
+- **`model/`** — the R code. The actual simulation scripts (e.g. `simulate.R`) invoked as subprocesses by the Wrapper.
+- **`tests/`** — Python tests for the Wrapper.
+- **`docs/adr/`** — architecture decision records.
+
 ## Language
 
 **Simulation**:
