@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+dist/
+*.egg-info/
+.pytest_cache/
+.coverage
+
+# R
+.Rhistory
+.RData
+.Rproj.user/
+renv/library/
+renv/python/
+renv/staging/
+
+# Data (keep directories, ignore contents)
+data/inputs/*
+data/outputs/*
+!data/inputs/.gitkeep
+!data/outputs/.gitkeep
+
+# macOS
+.DS_Store

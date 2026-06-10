@@ -1,0 +1,23 @@
+{
+    "name": "r-unner",
+    "build": {
+        "dockerfile": "../Dockerfile"
+    },
+    "workspaceFolder": "/workspace",
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+    "postCreateCommand": "uv sync && R -e \"if (!file.exists('renv.lock')) renv::init(bare=TRUE)\"",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "REditorSupport.r"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/workspace/.venv/bin/python",
+                "r.rterm.linux": "/usr/local/bin/R",
+                "r.lsp.enabled": true
+            }
+        }
+    }
+}

@@ -1,0 +1,11 @@
+.git/
+.devcontainer/
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+data/inputs/*
+data/outputs/*
+renv/library/
+.DS_Store
