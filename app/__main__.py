@@ -1,7 +1,7 @@
 import logging
 
-from runner.registry import SIMULATIONS
-from runner.runner import run_simulation
+from app.registry import SIMULATIONS
+from app.runner import run_simulation
 
 logging.basicConfig(
     level=logging.INFO,

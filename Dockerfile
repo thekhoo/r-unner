@@ -26,4 +26,4 @@ RUN R -e "if (file.exists('renv.lock')) renv::restore() else message('No renv.lo
 
 COPY . .
 
-CMD ["uv", "run", "python", "-m", "runner"]
+CMD ["uv", "run", "python", "-m", "app"]

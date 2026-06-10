@@ -1,8 +1,8 @@
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from runner.config import SimulationConfig
-from runner.runner import run_simulation
+from app.config import SimulationConfig
+from app.runner import run_simulation
 
 
 def test_simulation_config_has_default_paths():
@@ -31,7 +31,7 @@ def test_run_simulation_invokes_rscript_with_correct_args():
         outputs_path=Path("data/outputs"),
         params={"seed": "42"},
     )
-    with patch("runner.runner.subprocess.run") as mock_run:
+    with patch("app.runner.subprocess.run") as mock_run:
         mock_run.return_value = MagicMock(returncode=0)
         run_simulation(config)
     mock_run.assert_called_once_with(
@@ -50,7 +50,7 @@ def test_run_simulation_invokes_rscript_with_correct_args():
 
 def test_run_simulation_with_no_params():
     config = SimulationConfig(script=Path("r/simulate.R"))
-    with patch("runner.runner.subprocess.run") as mock_run:
+    with patch("app.runner.subprocess.run") as mock_run:
         mock_run.return_value = MagicMock(returncode=0)
         run_simulation(config)
     mock_run.assert_called_once_with(

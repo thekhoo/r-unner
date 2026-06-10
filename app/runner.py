@@ -1,7 +1,7 @@
 import logging
 import subprocess
 
-from runner.config import SimulationConfig
+from app.config import SimulationConfig
 
 logger = logging.getLogger(__name__)
 
