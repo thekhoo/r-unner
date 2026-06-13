@@ -4,8 +4,8 @@ A containerised environment that runs R simulations orchestrated by a Python wra
 
 ## Project Structure
 
-- **`app/`** — the Python Wrapper. Sets things up and drives execution: the simulation registry (`registry.py`), simulation configs (`config.py`), subprocess invocation (`runner.py`), and the CLI entry point (`__main__.py`, run via `python -m app`).
-- **`model/`** — the R code. The actual simulation scripts (e.g. `simulate.R`) invoked as subprocesses by the Wrapper.
+- **`app/`** — the Python Wrapper. Sets things up and drives execution: simulation configs and entrypoint loading (`config.py`), subprocess invocation (`runner.py`), and the CLI entry point (`__main__.py`, run via `python -m app`).
+- **`example_model/`** — an example R script used only for tests and demos. The real model is **not** part of this repo; it is supplied at runtime via the `RUNNER_ENTRYPOINT` environment variable.
 - **`tests/`** — Python tests for the Wrapper.
 - **`docs/adr/`** — architecture decision records.
 
@@ -15,9 +15,9 @@ A containerised environment that runs R simulations orchestrated by a Python wra
 A single R script execution, configured with a script path, scalar parameters, an inputs path, and an outputs path.
 _Avoid_: job, run, task
 
-**Simulation Registry**:
-The Python-side list of simulation configs the wrapper can select from and execute.
-_Avoid_: job list, run queue, pipeline
+**Entrypoint**:
+The R script the Wrapper executes, supplied at runtime via the `RUNNER_ENTRYPOINT` environment variable rather than stored in this repo.
+_Avoid_: registry, job, main script
 
 **Wrapper**:
 The Python process responsible for organising input data and invoking simulations as subprocesses.

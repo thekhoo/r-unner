@@ -7,7 +7,7 @@ A containerised environment that runs **R simulations** orchestrated by a **Pyth
 | Path        | What lives here                                                                 |
 | ----------- | ------------------------------------------------------------------------------- |
 | `app/`      | The Python **Wrapper** — sets things up and drives execution (entry: `python -m app`) |
-| `model/`    | The actual **R code** — simulation scripts invoked as subprocesses              |
+| `example_model/` | An **example R script** used only for tests/demos — the real model lives outside this repo |
 | `tests/`    | Python tests for the Wrapper                                                     |
 | `docs/adr/` | Architecture decision records (why things are the way they are)                 |
 
@@ -15,12 +15,15 @@ The Python ⇄ R contract: the Wrapper calls `Rscript <script> --inputs <path> -
 
 ## How it fits together
 
-- **`app/registry.py`** — `SIMULATIONS`, the list of simulations the Wrapper will run.
-- **`app/config.py`** — `SimulationConfig`: a script path, inputs/outputs paths, and scalar params.
+- **`app/config.py`** — `SimulationConfig` (a script path, inputs/outputs paths, scalar params) and `load_entrypoint()`, which reads the entrypoint script from the `RUNNER_ENTRYPOINT` environment variable.
 - **`app/runner.py`** — `run_simulation()`: builds the `Rscript` command and runs it as a subprocess.
-- **`app/__main__.py`** — iterates the registry and runs each simulation.
+- **`app/__main__.py`** — loads the entrypoint from `RUNNER_ENTRYPOINT` and runs that simulation.
 
-To add a simulation: drop an R script in `model/`, then register it in `app/registry.py`.
+The model is **not** part of this repo. Point `RUNNER_ENTRYPOINT` at the R script to execute:
+
+```bash
+RUNNER_ENTRYPOINT=path/to/your/simulate.R uv run python -m app
+```
 
 ## Running
 
@@ -28,7 +31,7 @@ The project targets Python 3.14 and uses [uv](https://docs.astral.sh/uv/) for Py
 
 ```bash
 uv sync              # install Python deps
-uv run python -m app # run all registered simulations
+RUNNER_ENTRYPOINT=example_model/simulate.R uv run python -m app  # run the entrypoint simulation
 uv run pytest        # run the test suite
 ```
 
