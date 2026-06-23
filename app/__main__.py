@@ -1,4 +1,5 @@
 import logging
+import sys
 
 from app.config import load_entrypoint
 from app.runner import run_simulation
@@ -9,8 +10,12 @@ logger = logging.getLogger(__name__)
 
 def main() -> None:
     configure_logging(level=logging.INFO)
-    config = load_entrypoint()
-    logger.info("Running entrypoint simulation: %s", config.script)
+    try:
+        config = load_entrypoint()
+    except RuntimeError as exc:
+        logger.error("%s", exc)
+        sys.exit(1)
+    logger.info("Running entrypoint simulation: %s", config.entrypoint)
     run_simulation(config)
     logger.info("Simulation complete")
 
