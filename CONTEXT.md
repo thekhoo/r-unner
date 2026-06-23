@@ -12,7 +12,7 @@ A containerised environment that runs R simulations orchestrated by a Python wra
 ## Language
 
 **Simulation**:
-A single R script execution, configured with a script path, scalar parameters, an inputs path, and an outputs path.
+A single R script execution, configured with a script path, an inputs path, and an outputs path.
 _Avoid_: job, run, task
 
 **Entrypoint**:
@@ -30,7 +30,3 @@ _Avoid_: input directory, data directory
 **Outputs Path**:
 The directory to which an R simulation writes its result files. Defaults to `data/outputs/`.
 _Avoid_: output directory, results directory
-
-**Scalar Parameters**:
-Non-file arguments (flags, numeric values, strings) passed to an R simulation via CLI arguments alongside the inputs and outputs paths.
-_Avoid_: flags, options, args

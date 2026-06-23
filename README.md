@@ -11,11 +11,17 @@ A containerised environment that runs **R simulations** orchestrated by a **Pyth
 | `tests/`    | Python tests for the Wrapper                                                     |
 | `docs/adr/` | Architecture decision records (why things are the way they are)                 |
 
-The Python ⇄ R contract: the Wrapper calls `Rscript <script> --inputs <path> --outputs <path> [--key=value ...]`. R scripts read inputs and write outputs; everything else is passed as scalar CLI args.
+The Python ⇄ R contract: the Wrapper calls `Rscript <script> --inputs <path> --outputs <path>`. R scripts read from the inputs path and write to the outputs path.
 
 ## How it fits together
 
-- **`app/config.py`** — `SimulationConfig` (a script path, inputs/outputs paths, scalar params) and `load_entrypoint()`, which reads the entrypoint script from the `RUNNER_ENTRYPOINT` environment variable.
+- **`app/config.py`** — `SimulationConfig`, a [pydantic-settings](https://docs.pydantic.dev/latest/concepts/pydantic_settings/) model loaded from `RUNNER_`-prefixed environment variables, and `load_entrypoint()`, which builds it (raising a clear error when `RUNNER_ENTRYPOINT` is unset). The variables are:
+
+  | Variable              | Maps to        | Default        |
+  | --------------------- | -------------- | -------------- |
+  | `RUNNER_ENTRYPOINT`   | `entrypoint`   | _(required)_   |
+  | `RUNNER_INPUTS_PATH`  | `inputs_path`  | `data/inputs`  |
+  | `RUNNER_OUTPUTS_PATH` | `outputs_path` | `data/outputs` |
 - **`app/runner.py`** — `run_simulation()`: builds the `Rscript` command and runs it as a subprocess.
 - **`app/__main__.py`** — loads the entrypoint from `RUNNER_ENTRYPOINT` and runs that simulation.
 
