@@ -1,12 +1,12 @@
 from pathlib import Path
 from unittest.mock import MagicMock, patch
 
-from app.config import SimulationConfig
+from app.config import RunnerConfig
 from app.runner import run_simulation
 
 
 def test_run_simulation_invokes_rscript_with_correct_args():
-    config = SimulationConfig(
+    config = RunnerConfig(
         entrypoint=Path("r/simulate.R"),
         inputs_path=Path("data/inputs"),
         outputs_path=Path("data/outputs"),
@@ -28,7 +28,7 @@ def test_run_simulation_invokes_rscript_with_correct_args():
 
 
 def test_run_simulation_uses_custom_paths():
-    config = SimulationConfig(
+    config = RunnerConfig(
         entrypoint=Path("r/simulate.R"),
         inputs_path=Path("custom/inputs"),
         outputs_path=Path("custom/outputs"),

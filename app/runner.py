@@ -1,12 +1,12 @@
 import logging
 import subprocess
 
-from app.config import SimulationConfig
+from app.config import RunnerConfig
 
 logger = logging.getLogger(__name__)
 
 
-def run_simulation(config: SimulationConfig) -> subprocess.CompletedProcess:
+def run_simulation(config: RunnerConfig) -> subprocess.CompletedProcess:
     cmd = [
         "Rscript",
         str(config.entrypoint),

@@ -8,8 +8,8 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 RUNNER_ENTRYPOINT_ENV = "RUNNER_ENTRYPOINT"
 
 
-class SimulationConfig(BaseSettings):
-    """Simulation config loaded from ``RUNNER_``-prefixed environment variables.
+class RunnerConfig(BaseSettings):
+    """Runner configuration loaded from ``RUNNER_``-prefixed environment variables.
 
     Each field maps to ``RUNNER_<FIELD>``: ``RUNNER_ENTRYPOINT``,
     ``RUNNER_INPUTS_PATH`` and ``RUNNER_OUTPUTS_PATH``.
@@ -29,15 +29,15 @@ class SimulationConfig(BaseSettings):
         return value
 
 
-def load_entrypoint() -> SimulationConfig:
-    """Build the simulation config from ``RUNNER_``-prefixed env vars.
+def load_config() -> RunnerConfig:
+    """Build the runner config from ``RUNNER_``-prefixed env vars.
 
     The model is supplied at runtime rather than living in this repo, so the
     entrypoint R script is read from the environment. Raises ``RuntimeError``
     with a clear message when ``RUNNER_ENTRYPOINT`` is missing or blank.
     """
     try:
-        return SimulationConfig()
+        return RunnerConfig()
     except ValidationError as exc:
         raise RuntimeError(
             f"{RUNNER_ENTRYPOINT_ENV} is not set. Point it at the R entrypoint "

@@ -2,42 +2,42 @@ from pathlib import Path
 
 import pytest
 
-from app.config import SimulationConfig, load_entrypoint
+from app.config import RunnerConfig, load_config
 
 
-def test_simulation_config_reads_runner_prefixed_env(monkeypatch):
+def test_runner_config_reads_runner_prefixed_env(monkeypatch):
     monkeypatch.setenv("RUNNER_ENTRYPOINT", "example_model/simulate.R")
     monkeypatch.setenv("RUNNER_INPUTS_PATH", "custom/inputs")
     monkeypatch.setenv("RUNNER_OUTPUTS_PATH", "custom/outputs")
-    config = SimulationConfig()
+    config = RunnerConfig()
     assert config.entrypoint == Path("example_model/simulate.R")
     assert config.inputs_path == Path("custom/inputs")
     assert config.outputs_path == Path("custom/outputs")
 
 
-def test_simulation_config_has_default_paths(monkeypatch):
+def test_runner_config_has_default_paths(monkeypatch):
     monkeypatch.setenv("RUNNER_ENTRYPOINT", "example_model/simulate.R")
     monkeypatch.delenv("RUNNER_INPUTS_PATH", raising=False)
     monkeypatch.delenv("RUNNER_OUTPUTS_PATH", raising=False)
-    config = SimulationConfig()
+    config = RunnerConfig()
     assert config.inputs_path == Path("data/inputs")
     assert config.outputs_path == Path("data/outputs")
 
 
-def test_load_entrypoint_builds_config_from_env(monkeypatch):
+def test_load_config_builds_config_from_env(monkeypatch):
     monkeypatch.setenv("RUNNER_ENTRYPOINT", "example_model/simulate.R")
-    config = load_entrypoint()
-    assert isinstance(config, SimulationConfig)
+    config = load_config()
+    assert isinstance(config, RunnerConfig)
     assert config.entrypoint == Path("example_model/simulate.R")
 
 
-def test_load_entrypoint_raises_when_unset(monkeypatch):
+def test_load_config_raises_when_unset(monkeypatch):
     monkeypatch.delenv("RUNNER_ENTRYPOINT", raising=False)
     with pytest.raises(RuntimeError, match="RUNNER_ENTRYPOINT"):
-        load_entrypoint()
+        load_config()
 
 
-def test_load_entrypoint_raises_when_blank(monkeypatch):
+def test_load_config_raises_when_blank(monkeypatch):
     monkeypatch.setenv("RUNNER_ENTRYPOINT", "  ")
     with pytest.raises(RuntimeError, match="RUNNER_ENTRYPOINT"):
-        load_entrypoint()
+        load_config()

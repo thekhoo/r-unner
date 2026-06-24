@@ -15,7 +15,7 @@ The Python ⇄ R contract: the Wrapper calls `Rscript <script> --inputs <path> -
 
 ## How it fits together
 
-- **`app/config.py`** — `SimulationConfig`, a [pydantic-settings](https://docs.pydantic.dev/latest/concepts/pydantic_settings/) model loaded from `RUNNER_`-prefixed environment variables, and `load_entrypoint()`, which builds it (raising a clear error when `RUNNER_ENTRYPOINT` is unset). The variables are:
+- **`app/config.py`** — `RunnerConfig`, a [pydantic-settings](https://docs.pydantic.dev/latest/concepts/pydantic_settings/) model loaded from `RUNNER_`-prefixed environment variables, and `load_config()`, which builds it (raising a clear error when `RUNNER_ENTRYPOINT` is unset). The variables are:
 
   | Variable              | Maps to        | Default        |
   | --------------------- | -------------- | -------------- |
