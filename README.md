@@ -7,20 +7,29 @@ A containerised environment that runs **R simulations** orchestrated by a **Pyth
 | Path        | What lives here                                                                 |
 | ----------- | ------------------------------------------------------------------------------- |
 | `app/`      | The Python **Wrapper** — sets things up and drives execution (entry: `python -m app`) |
-| `model/`    | The actual **R code** — simulation scripts invoked as subprocesses              |
+| `example_model/` | An **example R script** used only for tests/demos — the real model lives outside this repo |
 | `tests/`    | Python tests for the Wrapper                                                     |
 | `docs/adr/` | Architecture decision records (why things are the way they are)                 |
 
-The Python ⇄ R contract: the Wrapper calls `Rscript <script> --inputs <path> --outputs <path> [--key=value ...]`. R scripts read inputs and write outputs; everything else is passed as scalar CLI args.
+The Python ⇄ R contract: the Wrapper calls `Rscript <script> --inputs <path> --outputs <path>`. R scripts read from the inputs path and write to the outputs path.
 
 ## How it fits together
 
-- **`app/registry.py`** — `SIMULATIONS`, the list of simulations the Wrapper will run.
-- **`app/config.py`** — `SimulationConfig`: a script path, inputs/outputs paths, and scalar params.
-- **`app/runner.py`** — `run_simulation()`: builds the `Rscript` command and runs it as a subprocess.
-- **`app/__main__.py`** — iterates the registry and runs each simulation.
+- **`app/config.py`** — `RunnerConfig`, a [pydantic-settings](https://docs.pydantic.dev/latest/concepts/pydantic_settings/) model loaded from `RUNNER_`-prefixed environment variables, and `load_config()`, which builds it (raising a clear error when `RUNNER_ENTRYPOINT` is unset). The variables are:
 
-To add a simulation: drop an R script in `model/`, then register it in `app/registry.py`.
+  | Variable              | Maps to        | Default        |
+  | --------------------- | -------------- | -------------- |
+  | `RUNNER_ENTRYPOINT`   | `entrypoint`   | _(required)_   |
+  | `RUNNER_INPUTS_PATH`  | `inputs_path`  | `data/inputs`  |
+  | `RUNNER_OUTPUTS_PATH` | `outputs_path` | `data/outputs` |
+- **`app/runner.py`** — `run_simulation()`: builds the `Rscript` command and runs it as a subprocess.
+- **`app/__main__.py`** — loads the entrypoint from `RUNNER_ENTRYPOINT` and runs that simulation.
+
+The model is **not** part of this repo. Point `RUNNER_ENTRYPOINT` at the R script to execute:
+
+```bash
+RUNNER_ENTRYPOINT=path/to/your/simulate.R uv run python -m app
+```
 
 ## Running
 
@@ -28,7 +37,7 @@ The project targets Python 3.14 and uses [uv](https://docs.astral.sh/uv/) for Py
 
 ```bash
 uv sync              # install Python deps
-uv run python -m app # run all registered simulations
+RUNNER_ENTRYPOINT=example_model/simulate.R uv run python -m app  # run the entrypoint simulation
 uv run pytest        # run the test suite
 ```
 
