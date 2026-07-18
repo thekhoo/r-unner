@@ -43,12 +43,7 @@ _RESERVED_ATTRS = frozenset(
 
 
 class JsonFormatter(logging.Formatter):
-    """Render a ``LogRecord`` as a single-line JSON object.
-
-    Always includes ``timestamp`` (ISO 8601, UTC), ``level``, ``logger`` and
-    ``message``. Exception/stack info and any caller-supplied ``extra=`` fields
-    are merged in when present.
-    """
+    """Render a ``LogRecord`` as a single-line JSON object."""
 
     def format(self, record: logging.LogRecord) -> str:
         payload: dict[str, object] = {

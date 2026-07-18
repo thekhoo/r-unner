@@ -1,8 +1,8 @@
 import logging
 import sys
 
-from app.config import load_config
 from app.runner import run_simulation
+from app.utils.environment import RunnerConfig
 from app.utils.logger import configure_logging
 
 logger = logging.getLogger(__name__)
@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 def main() -> None:
     configure_logging(level=logging.INFO)
     try:
-        config = load_config()
+        config = RunnerConfig()
     except RuntimeError as exc:
         logger.error("%s", exc)
         sys.exit(1)

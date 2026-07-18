@@ -10,3 +10,9 @@ def runner_entrypoint(monkeypatch):
     Tests that need a different value override it with their own monkeypatch.
     """
     monkeypatch.setenv("RUNNER_ENTRYPOINT", "example_model/simulate.R")
+    monkeypatch.setenv(
+        "RUNNER_INPUTS_S3_URI", "s3://test-inputs-bucket/test-inputs-prefix"
+    )
+    monkeypatch.setenv(
+        "RUNNER_OUTPUTS_S3_URI", "s3://test-outputs-bucket/test-outputs-prefix"
+    )
