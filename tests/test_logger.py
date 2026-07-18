@@ -1,7 +1,6 @@
 import json
 import logging
 from logging.handlers import RotatingFileHandler
-from pathlib import Path
 
 import pytest
 
@@ -102,11 +101,7 @@ class TestConfigureLogging:
     def test_console_handler_is_not_json(self, tmp_path):
         configure_logging(log_dir=tmp_path)
         root = logging.getLogger()
-        stream = next(
-            h
-            for h in root.handlers
-            if type(h) is logging.StreamHandler
-        )
+        stream = next(h for h in root.handlers if type(h) is logging.StreamHandler)
         assert not isinstance(stream.formatter, JsonFormatter)
 
     def test_file_handler_uses_json_and_5mb_rotation(self, tmp_path):

@@ -1,21 +1,22 @@
 import logging
 import subprocess
 
-from app.config import SimulationConfig
+from app.utils.environment import RunnerConfig
 
 logger = logging.getLogger(__name__)
 
 
-def run_simulation(config: SimulationConfig) -> subprocess.CompletedProcess:
+def run_simulation(config: RunnerConfig) -> subprocess.CompletedProcess:
     cmd = [
         "Rscript",
-        str(config.script),
-        "--inputs", str(config.inputs_path),
-        "--outputs", str(config.outputs_path),
-        *[f"--{k}={v}" for k, v in config.params.items()],
+        config.entrypoint,
+        "--inputs",
+        config.inputs_s3_uri,
+        "--outputs",
+        config.outputs_s3_uri,
     ]
-    logger.info("Running simulation: %s", config.script)
+    logger.info("Running simulation: %s", config.entrypoint)
     logger.debug("Command: %s", cmd)
     result = subprocess.run(cmd, check=True, capture_output=True, text=True)
-    logger.info("Simulation complete: %s", config.script)
+    logger.info("Simulation complete: %s", config.entrypoint)
     return result

@@ -1,7 +1,8 @@
 import logging
+import sys
 
-from app.registry import SIMULATIONS
 from app.runner import run_simulation
+from app.utils.environment import RunnerConfig
 from app.utils.logger import configure_logging
 
 logger = logging.getLogger(__name__)
@@ -9,10 +10,14 @@ logger = logging.getLogger(__name__)
 
 def main() -> None:
     configure_logging(level=logging.INFO)
-    logger.info("Starting runner with %d simulation(s)", len(SIMULATIONS))
-    for config in SIMULATIONS:
-        run_simulation(config)
-    logger.info("All simulations complete")
+    try:
+        config = RunnerConfig()
+    except RuntimeError as exc:
+        logger.error("%s", exc)
+        sys.exit(1)
+    logger.info("Running entrypoint simulation: %s", config.entrypoint)
+    run_simulation(config)
+    logger.info("Simulation complete")
 
 
 if __name__ == "__main__":
