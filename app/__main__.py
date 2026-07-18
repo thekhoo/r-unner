@@ -2,22 +2,20 @@ import logging
 import sys
 
 from app.runner import run_simulation
-from app.utils.environment import RunnerConfig
-from app.utils.logger import configure_logging
+from app.utils.environment import EnvironmentManager
 
 logger = logging.getLogger(__name__)
 
 
 def main() -> None:
-    configure_logging(level=logging.INFO)
     try:
-        config = RunnerConfig()
-    except RuntimeError as exc:
-        logger.error("%s", exc)
+        with EnvironmentManager(log_level=logging.INFO) as env_manager:
+            config = env_manager.config
+            run_simulation(config)
+
+    except Exception as e:
+        logger.error("An error occurred: %s", e)
         sys.exit(1)
-    logger.info("Running entrypoint simulation: %s", config.entrypoint)
-    run_simulation(config)
-    logger.info("Simulation complete")
 
 
 if __name__ == "__main__":

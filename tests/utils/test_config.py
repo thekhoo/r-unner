@@ -1,6 +1,6 @@
 from unittest.mock import patch
 
-import app.utils.environment as env
+import app.utils.config as conf
 
 
 @patch.dict(
@@ -13,10 +13,10 @@ import app.utils.environment as env
 )
 class TestRunnerConfig:
     def test_runner_config_returns_s3_environment_variables_in_config(self):
-        config = env.RunnerConfig()
+        config = conf.RunnerConfig()
         assert config.inputs_s3_uri == "s3://test-inputs-bucket/test-inputs-prefix"
         assert config.outputs_s3_uri == "s3://test-outputs-bucket/test-outputs-prefix"
 
     def test_runner_config_returns_entrypoint_environment_variable_in_config(self):
-        config = env.RunnerConfig()
+        config = conf.RunnerConfig()
         assert config.entrypoint == "path/to/entrypoint.R"
