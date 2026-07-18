@@ -26,3 +26,8 @@ logs/
 
 # macOS
 .DS_Store
+
+# memray
+*.bin
+*.html
+test.py

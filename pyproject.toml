@@ -3,7 +3,8 @@ name = "r-unner"
 version = "0.1.0"
 requires-python = ">=3.14"
 dependencies = [
-    "pydantic-settings>=2.14.1",
+    "pydantic-settings~=2.14.1",
+    "memray~=1.19.3"
 ]
 
 [build-system]
